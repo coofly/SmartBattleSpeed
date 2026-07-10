@@ -73,4 +73,4 @@ LongYinLiZhiZhuan\Mods\SmartBattleSpeedMod.dll
 - 发行说明：填写本次更新内容。
 - 预发布：测试版本按需勾选。
 
-工作流会自动编译 Release、创建 `v版本号` 标签和 GitHub Release，并上传 `SmartBattleSpeedMod.dll`。
+工作流会自动编译 Release、创建 `v版本号` 标签和 GitHub Release，并上传包含 `SmartBattleSpeedMod.dll` 的 `SmartBattleSpeed-v版本号.zip`。

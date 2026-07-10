@@ -80,6 +80,21 @@ jobs:
           Write-Host "编译完成：$dll"
           Write-Host "DLL SHA256：$hash"
 
+      - name: 打包 ZIP
+        shell: pwsh
+        run: |
+          $archive = ".\bin\SmartBattleSpeed-v$env:RELEASE_VERSION.zip"
+          Compress-Archive `
+            -LiteralPath .\bin\SmartBattleSpeedMod.dll `
+            -DestinationPath $archive `
+            -CompressionLevel Optimal
+
+          $archivePath = Resolve-Path $archive
+          $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $archivePath).Hash
+          "RELEASE_ARCHIVE=$archivePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Host "ZIP 打包完成：$archivePath"
+          Write-Host "ZIP SHA256：$hash"
+
       - name: 创建 GitHub Release
         shell: pwsh
         env:
@@ -92,7 +107,7 @@ jobs:
 
           $arguments = @(
               'release', 'create', $env:RELEASE_TAG,
-              '.\bin\SmartBattleSpeedMod.dll',
+              $env:RELEASE_ARCHIVE,
               '--title', "SmartBattleSpeed $env:RELEASE_TAG",
               '--notes-file', $notesPath,
               '--target', $env:GITHUB_SHA
@@ -107,4 +122,3 @@ jobs:
           }
 
           Write-Host "发行完成：$env:RELEASE_TAG。"
-
