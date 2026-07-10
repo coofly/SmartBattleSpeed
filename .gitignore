@@ -1,0 +1,9 @@
+# 用途：排除 SmartBattleSpeedMod 的可再生成构建产物和本地开发状态。
+bin/
+obj/
+docs/
+dumps/
+.vs/
+*.user
+*.suo
+*.userprefs
