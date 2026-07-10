@@ -64,3 +64,13 @@ LongYinLiZhiZhuan\Mods\SmartBattleSpeedMod.dll
 - 同步智能按钮与原生倍速按钮的选中状态。
 - 优化玩家不上场战斗中的“跳过”按钮位置。
 - 增加调试日志开关，默认只输出加载成功和玩家设置日志。
+
+## 维护者发布
+
+在 GitHub 仓库的 Actions 页面中选择“手动编译并发布”，点击“Run workflow”并填写：
+
+- 版本号：使用 `1.2.3` 格式，不要带 `v`。
+- 发行说明：填写本次更新内容。
+- 预发布：测试版本按需勾选。
+
+工作流会自动编译 Release、创建 `v版本号` 标签和 GitHub Release，并上传 `SmartBattleSpeedMod.dll`。

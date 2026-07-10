@@ -10,9 +10,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-[assembly: MelonInfo(typeof(SmartBattleSpeedMod.SmartBattleSpeedPlugin), "智能战斗倍速", "1.0.0", "Sc千寻")]
-[assembly: MelonGame(null, "LongYinLiZhiZhuan")]
-
 namespace SmartBattleSpeedMod;
 
 // 智能战斗倍速 Mod 入口，负责补丁安装和战斗 UI 生命周期。

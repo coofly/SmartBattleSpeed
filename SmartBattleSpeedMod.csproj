@@ -1,3 +1,4 @@
+<!-- 用途：配置 SmartBattleSpeedMod 的本地与 GitHub Actions 可移植构建。 -->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -16,44 +17,59 @@
 
   <ItemGroup>
     <Reference Include="MelonLoader">
-      <HintPath>G:\SteamLibrary\steamapps\common\LongYinLiZhiZhuan\MelonLoader\net6\MelonLoader.dll</HintPath>
+      <HintPath>references\MelonLoader.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="0Harmony">
-      <HintPath>G:\SteamLibrary\steamapps\common\LongYinLiZhiZhuan\MelonLoader\net6\0Harmony.dll</HintPath>
+      <HintPath>references\0Harmony.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Il2CppInterop.Runtime">
-      <HintPath>G:\SteamLibrary\steamapps\common\LongYinLiZhiZhuan\MelonLoader\net6\Il2CppInterop.Runtime.dll</HintPath>
+      <HintPath>references\Il2CppInterop.Runtime.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>G:\SteamLibrary\steamapps\common\LongYinLiZhiZhuan\MelonLoader\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>references\Il2Cppmscorlib.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>G:\SteamLibrary\steamapps\common\LongYinLiZhiZhuan\MelonLoader\Il2CppAssemblies\Assembly-CSharp.dll</HintPath>
+      <HintPath>references\Assembly-CSharp.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>G:\SteamLibrary\steamapps\common\LongYinLiZhiZhuan\MelonLoader\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>references\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>G:\SteamLibrary\steamapps\common\LongYinLiZhiZhuan\MelonLoader\Il2CppAssemblies\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>references\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>G:\SteamLibrary\steamapps\common\LongYinLiZhiZhuan\MelonLoader\Il2CppAssemblies\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>references\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>G:\SteamLibrary\steamapps\common\LongYinLiZhiZhuan\MelonLoader\Il2CppAssemblies\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>references\UnityEngine.UIModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>G:\SteamLibrary\steamapps\common\LongYinLiZhiZhuan\MelonLoader\Il2CppAssemblies\UnityEngine.UI.dll</HintPath>
+      <HintPath>references\UnityEngine.UI.dll</HintPath>
       <Private>false</Private>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="MelonLoader.MelonInfoAttribute">
+      <_Parameter1>typeof(SmartBattleSpeedMod.SmartBattleSpeedPlugin)</_Parameter1>
+      <_Parameter1_IsLiteral>true</_Parameter1_IsLiteral>
+      <_Parameter2>智能战斗倍速</_Parameter2>
+      <_Parameter3>$(Version)</_Parameter3>
+      <_Parameter4>Sc千寻</_Parameter4>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="MelonLoader.MelonGameAttribute">
+      <_Parameter1>null</_Parameter1>
+      <_Parameter1_IsLiteral>true</_Parameter1_IsLiteral>
+      <_Parameter2>LongYinLiZhiZhuan</_Parameter2>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>

@@ -1,0 +1,110 @@
+# 用途：从 GitHub 后台手动编译 SmartBattleSpeedMod 并创建 Release。
+name: 手动编译并发布
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "版本号（例如 1.0.1，不要带 v）"
+        required: true
+        type: string
+      release_notes:
+        description: "本次发行说明"
+        required: true
+        type: string
+      prerelease:
+        description: "标记为预发布版本"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: smart-battle-speed-release
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    name: 编译并发布
+    runs-on: windows-latest
+
+    steps:
+      - name: 检出源码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 安装 .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: 校验发行参数
+        shell: pwsh
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          $version = $env:INPUT_VERSION.Trim()
+          if ($version -notmatch '^\d+\.\d+\.\d+$') {
+              throw "版本号格式无效：$version。请使用 1.2.3 格式且不要带 v。"
+          }
+
+          $tag = "v$version"
+          $existingTag = git ls-remote --tags origin "refs/tags/$tag"
+          if ($existingTag) {
+              throw "标签 $tag 已存在，请使用新的版本号。"
+          }
+
+          "RELEASE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "RELEASE_TAG=$tag" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Host "发行参数校验通过：版本 $version，标签 $tag。"
+
+      - name: 还原依赖
+        shell: pwsh
+        run: dotnet restore .\SmartBattleSpeedMod.csproj
+
+      - name: 编译 Release
+        shell: pwsh
+        run: |
+          dotnet build .\SmartBattleSpeedMod.csproj `
+            --configuration Release `
+            --no-restore `
+            -p:Version=$env:RELEASE_VERSION `
+            -p:AssemblyVersion="$env:RELEASE_VERSION.0" `
+            -p:FileVersion="$env:RELEASE_VERSION.0"
+
+          $dll = Resolve-Path .\bin\SmartBattleSpeedMod.dll
+          $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $dll).Hash
+          Write-Host "编译完成：$dll"
+          Write-Host "DLL SHA256：$hash"
+
+      - name: 创建 GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_NOTES: ${{ inputs.release_notes }}
+          IS_PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          $notesPath = Join-Path $env:RUNNER_TEMP 'release-notes.md'
+          Set-Content -LiteralPath $notesPath -Value $env:RELEASE_NOTES -Encoding utf8
+
+          $arguments = @(
+              'release', 'create', $env:RELEASE_TAG,
+              '.\bin\SmartBattleSpeedMod.dll',
+              '--title', "SmartBattleSpeed $env:RELEASE_TAG",
+              '--notes-file', $notesPath,
+              '--target', $env:GITHUB_SHA
+          )
+          if ($env:IS_PRERELEASE -eq 'true') {
+              $arguments += '--prerelease'
+          }
+
+          & gh @arguments
+          if ($LASTEXITCODE -ne 0) {
+              throw "GitHub Release 创建失败，gh 退出码：$LASTEXITCODE。"
+          }
+
+          Write-Host "发行完成：$env:RELEASE_TAG。"
+
